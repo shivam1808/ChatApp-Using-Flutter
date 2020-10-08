@@ -24,6 +24,7 @@ class _SignUpState extends State<SignUp> {
 
   final formKey = GlobalKey<FormState>();
   bool isLoading = false;
+  int selected;
 
   singUp() async {
     if (formKey.currentState.validate()) {
@@ -78,45 +79,109 @@ class _SignUpState extends State<SignUp> {
                 child: Container(
                   child: Column(
                     children: [
-                      Container(
-                        margin: EdgeInsets.only(top: 10),
-                        alignment: Alignment.centerRight,
-                        child: Column(
-                          children: [
-                            Text(
-                              "Already have an account? ",
-                              style: simpleTextStyle(),
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.only(left: 20, top: 10),
+                            alignment: Alignment.centerLeft,
+                            child: Image.asset(
+                              "assets/images/an4.gif",
+                              width: 100,
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                widget.toggleView();
-                              },
-                              child: Text(
-                                "SignIn now",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 16,
-                                    decoration: TextDecoration.underline),
-                              ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(left: 55),
+                            alignment: Alignment.centerRight,
+                            child: Column(
+                              children: [
+                                Text(
+                                  "Already have an account? ",
+                                  style: simpleTextStyle(),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    widget.toggleView();
+                                  },
+                                  child: Text(
+                                    "SignIn now",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        decoration: TextDecoration.underline),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 140,
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: 20),
-                        alignment: Alignment.centerLeft,
-                        child: Image.asset(
-                          "assets/images/an4.gif",
-                          width: 150,
-                        ),
+                          ),
+                        ],
                       ),
                       Form(
                         key: formKey,
                         child: Column(
                           children: [
+                            SizedBox(
+                              height: 50,
+                            ),
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Profile",
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 30),
+                              ),
+                            ),
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Selection:",
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 30),
+                              ),
+                            ),
+                            Row(
+                              children: <Widget>[
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      selected = 0;
+                                    });
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.only(left: 20, top: 10),
+                                    alignment: Alignment.centerLeft,
+                                    child: (selected != null && selected == 0)
+                                        ? Image.asset(
+                                            "assets/images/g_a.png",
+                                            width: 100,
+                                          )
+                                        : Image.asset(
+                                            "assets/images/g_avatar.png",
+                                            width: 100,
+                                          ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      selected = 1;
+                                    });
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.only(left: 20, top: 10),
+                                    alignment: Alignment.centerLeft,
+                                    child: (selected != null && selected == 1)
+                                        ? Image.asset(
+                                            "assets/images/m_a.png",
+                                            width: 100,
+                                          )
+                                        : Image.asset(
+                                            "assets/images/m_avatar.png",
+                                            width: 100,
+                                          ),
+                                  ),
+                                ),
+                              ],
+                            ),
                             TextFormField(
                               style: simpleTextStyle(),
                               controller: usernameEditingController,

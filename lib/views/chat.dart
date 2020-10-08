@@ -65,11 +65,40 @@ class _ChatState extends State<Chat> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarMain(context),
+      appBar: AppBar(
+        backgroundColor: Colors.black12,
+        title: widget.chatRoomId
+                    .toString()
+                    .replaceAll("_", "")
+                    .replaceAll(Constants.myName, "") ==
+                "Shivam"
+            ? Image.asset(
+                "assets/images/m_avatar.png",
+                height: 40,
+              )
+            : Image.asset(
+                "assets/images/g_avatar.png",
+                height: 40,
+              ),
+        actions: <Widget>[
+          Text(
+            widget.chatRoomId
+                .toString()
+                .replaceAll("_", "")
+                .replaceAll(Constants.myName, ""),
+            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width / 3,
+          )
+        ],
+        elevation: 10.0,
+        centerTitle: false,
+      ),
       body: Container(
         child: Stack(
           children: [
-            chatMessages(),
+            Container(child: chatMessages()),
             Container(
               alignment: Alignment.bottomCenter,
               width: MediaQuery.of(context).size.width,

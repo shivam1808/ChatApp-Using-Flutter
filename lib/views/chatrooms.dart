@@ -15,6 +15,7 @@ class ChatRoom extends StatefulWidget {
 
 class _ChatRoomState extends State<ChatRoom> {
   Stream chatRooms;
+  String userNameTitle;
 
   Widget chatRoomsList() {
     return StreamBuilder(
@@ -42,6 +43,7 @@ class _ChatRoomState extends State<ChatRoom> {
   @override
   void initState() {
     getUserInfogetChats();
+    getUserName();
     super.initState();
   }
 
@@ -53,6 +55,14 @@ class _ChatRoomState extends State<ChatRoom> {
         print(
             "we got the data + ${chatRooms.toString()} this is name  ${Constants.myName}");
       });
+    });
+  }
+
+  getUserName() async {
+    Constants.myName = await HelperFunctions.getUserNameSharedPreference();
+    setState(() {
+      userNameTitle = Constants.myName;
+      print("User Name: + ${userNameTitle}");
     });
   }
 
@@ -68,7 +78,7 @@ class _ChatRoomState extends State<ChatRoom> {
         centerTitle: false,
         actions: [
           Text(
-            "ChatApp",
+            userNameTitle == null ? "ChatApp" : userNameTitle,
             style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
           ),
           SizedBox(
@@ -108,47 +118,94 @@ class ChatRoomsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => Chat(
-                      chatRoomId: chatRoomId,
-                    )));
-      },
-      child: Container(
-        color: Colors.black87,
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-        child: Row(
-          children: [
-            Container(
-              height: 30,
-              width: 30,
-              decoration: BoxDecoration(
-                  color: CustomTheme.colorAccent,
-                  borderRadius: BorderRadius.circular(30)),
-              child: Text(userName.substring(0, 1),
-                  textAlign: TextAlign.center,
+    return Column(
+      children: <Widget>[
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Chat(
+                          chatRoomId: chatRoomId,
+                        )));
+          },
+          child: Container(
+            color: Colors.black,
+            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+            child: Row(
+              children: [
+                Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                      color: CustomTheme.colorAccent,
+                      borderRadius: BorderRadius.circular(40)),
+                  child: Text(userName.substring(0, 1),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 25,
+                          fontFamily: 'OverpassRegular',
+                          fontWeight: FontWeight.w300)),
+                ),
+                SizedBox(
+                  width: 12,
+                ),
+                Text(
+                  userName,
+                  textAlign: TextAlign.start,
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 25,
                       fontFamily: 'OverpassRegular',
-                      fontWeight: FontWeight.w300)),
+                      fontWeight: FontWeight.w300),
+                ),
+              ],
             ),
-            SizedBox(
-              width: 12,
-            ),
-            Text(userName,
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 25,
-                    fontFamily: 'OverpassRegular',
-                    fontWeight: FontWeight.w300))
-          ],
+          ),
         ),
-      ),
+        _divider(),
+      ],
     );
   }
+}
+
+Widget _divider() {
+  return Container(
+    child: Row(
+      children: <Widget>[
+        SizedBox(
+          width: 20,
+        ),
+        Expanded(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: Divider(
+              color: Colors.white,
+              thickness: 1,
+            ),
+          ),
+        ),
+        Center(
+          child: Icon(
+            Icons.star,
+            color: Colors.white,
+            size: 15.0,
+          ),
+        ),
+        Expanded(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            child: Divider(
+              color: Colors.white,
+              thickness: 1,
+            ),
+          ),
+        ),
+        SizedBox(
+          width: 20,
+        ),
+      ],
+    ),
+  );
 }
