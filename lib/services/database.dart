@@ -21,6 +21,13 @@ class DatabaseMethods {
     return Firestore.instance.collection("users").getDocuments();
   }
 
+  searchOneName(String searchField) {
+    return Firestore.instance
+        .collection("users")
+        .where("userName", isEqualTo: searchField)
+        .getDocuments();
+  }
+
   Future<bool> addChatRoom(chatRoom, chatRoomId) {
     Firestore.instance
         .collection("chatRoom")

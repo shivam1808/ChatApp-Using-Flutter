@@ -1,5 +1,6 @@
 import 'package:chatapp/helper/constants.dart';
 import 'package:chatapp/services/database.dart';
+import 'package:chatapp/views/profile.dart';
 import 'package:chatapp/widget/widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -68,10 +69,15 @@ class _ChatState extends State<Chat> {
       appBar: AppBar(
         backgroundColor: Colors.black12,
         title: widget.chatRoomId
-                    .toString()
-                    .replaceAll("_", "")
-                    .replaceAll(Constants.myName, "") ==
-                "Shivam"
+                        .toString()
+                        .replaceAll("_", "")
+                        .replaceAll(Constants.myName, "") ==
+                    "Shivam" ||
+                widget.chatRoomId
+                        .toString()
+                        .replaceAll("_", "")
+                        .replaceAll(Constants.myName, "") ==
+                    "Tony"
             ? Image.asset(
                 "assets/images/m_avatar.png",
                 height: 40,
@@ -89,8 +95,25 @@ class _ChatState extends State<Chat> {
             style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
           ),
           SizedBox(
-            width: MediaQuery.of(context).size.width / 3,
-          )
+            width: 100,
+          ),
+          GestureDetector(
+            onTap: () {
+              print(widget.chatRoomId);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => UserProfile(
+                    chatRoomId: widget.chatRoomId,
+                  ),
+                ),
+              );
+            },
+            child: Icon(Icons.person),
+          ),
+          SizedBox(
+            width: 10,
+          ),
         ],
         elevation: 10.0,
         centerTitle: false,
