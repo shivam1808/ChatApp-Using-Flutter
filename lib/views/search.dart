@@ -5,6 +5,7 @@ import 'package:chatapp/views/chat.dart';
 import 'package:chatapp/widget/widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 class Search extends StatefulWidget {
   @override
@@ -18,6 +19,10 @@ class _SearchState extends State<Search> {
 
   bool isLoading = false;
   bool haveUserSearched = false;
+
+  final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+  Position _currentPosition;
+  String _currentAddress;
 
   initiateSearch() async {
     setState(() {
@@ -86,7 +91,14 @@ class _SearchState extends State<Search> {
               Text(
                 userEmail,
                 style: TextStyle(color: Colors.white, fontSize: 16),
-              )
+              ),
+              if (_currentPosition != null && _currentAddress != null)
+                Text(
+                  _currentAddress,
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),
+                ),
             ],
           ),
           Spacer(),
@@ -121,6 +133,37 @@ class _SearchState extends State<Search> {
   void initState() {
     initiateSearch();
     super.initState();
+    _getCurrentLocation();
+  }
+
+  _getCurrentLocation() {
+    geolocator
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+        .then((Position position) {
+      setState(() {
+        _currentPosition = position;
+      });
+
+      _getAddressFromLatLng();
+    }).catchError((e) {
+      print(e);
+    });
+  }
+
+  _getAddressFromLatLng() async {
+    try {
+      List<Placemark> p = await geolocator.placemarkFromCoordinates(
+          _currentPosition.latitude, _currentPosition.longitude);
+
+      Placemark place = p[0];
+
+      setState(() {
+        _currentAddress =
+            "${place.locality}, ${place.postalCode}, ${place.country}";
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
